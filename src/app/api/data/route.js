@@ -17,5 +17,3 @@ export async function GET() {
   console.log(JSON.stringify(data, null, 2));
   return NextResponse.json(data, { status: 200 });
 }
-
-GET();
