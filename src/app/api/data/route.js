@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.SUPABASE_SECRET_KEY
 );
 
-export async function getCommunities() {
+export async function GET() {
   const { data, error } = await supabase.from("communities").select("*");
 
   if (error) {
