@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+    <footer className="fixed bottom-0 left-0 right-0 w-full py-2 bg-gradient-to-r from-green-300 via-custom-green to-green-300  border-t flex items-center justify-center">
       <p>Created by Random Acts</p>
     </footer>
   );
