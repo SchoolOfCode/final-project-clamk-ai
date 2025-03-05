@@ -1,18 +1,21 @@
 import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server.js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SECRET_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
 export async function GET() {
   const { data, error } = await supabase.from("communities").select("*");
-
   if (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
-  console.log(getCommunities);
-  return Response.json(data, { status: 200 });
+  console.log(JSON.stringify(data, null, 2));
+  return NextResponse.json(data, { status: 200 });
 }
+
+GET();
