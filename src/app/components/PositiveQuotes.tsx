@@ -28,7 +28,7 @@ export default function PositiveQuotes () {
   }, []); // Empty dependency array ensures it runs only on mount 
 
   return (
-    <div className="flex justify-center items-center p-16">
+    <div className="flex justify-center items-center mt-10 p-16">
       <div className="bg-green-100 p-4 rounded-xl shadow-lg w-96">
         <blockquote className="text-xl text-green-700 font-semibold italic text-center mb-4">
           {quote}
