@@ -6,6 +6,13 @@ import CommunityCard from "../components/CommunityCard";
 import { useState, useEffect } from "react";
 import { GET } from "../api/data/route";
 
+interface Communities {
+  id: number;
+  name: string;
+  purpose: string;
+  link: string;
+}
+
 export default function Communities() {
   const [communities, setCommunities] = useState([]);
 
@@ -27,7 +34,7 @@ export default function Communities() {
           Communities
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {communities.map((community) => (
+          {communities.map((community: Communities) => (
             <CommunityCard
               key={community.id}
               name={community.name}
