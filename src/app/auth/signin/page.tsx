@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"; // Use `useRouter` from next/naviga
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null); // Fixed type for error
   const [isLoading, setIsLoading] = useState(true); // Add loading state
   const router = useRouter(); // Hook to navigate
 
@@ -16,7 +16,6 @@ const SignIn = () => {
     const checkUser = async () => {
       const {
         data: { user },
-        error,
       } = await supabase.auth.getUser();
       if (user) {
         router.push("/"); // Redirect to home if user is logged in
@@ -27,14 +26,11 @@ const SignIn = () => {
     checkUser();
   }, [router]);
 
-  const handleSignIn = async (e) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -42,7 +38,7 @@ const SignIn = () => {
     if (error) {
       setError(error.message);
     } else {
-      console.log("User signed in:", user);
+      console.log("User signed in:", data.user);
       // Redirect to home page after successful sign-in
       router.push("/"); // Assuming your home page is the default route
     }
@@ -92,7 +88,7 @@ const SignIn = () => {
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-700">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <a href="/signup" className="text-blue-500 hover:text-blue-600">
               Sign Up
             </a>
