@@ -26,11 +26,6 @@ export default function Header() {
             <Navbar />
           </div>
         </div>
-
-        {/* Positive Quotation outside the pill */}
-        <h2 className="text-2xl text-custom-white text-center mt-4">
-          Positive Quotation
-        </h2>
       </main>
     </div>
   );
