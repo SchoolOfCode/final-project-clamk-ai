@@ -9,7 +9,7 @@ export default function About() {
         <h1 className="text-4xl font-semibold text-center text-green-800 mb-8">About Our App</h1>
 
         <section className="mb-12 p-6 bg-white border border-green-500 rounded-lg">
-          <h2 className="text-3xl font-semibold text-green-700 mb-4">We're Team Random Acts</h2>
+          <h2 className="text-3xl font-semibold text-green-700 mb-4">We are Team Random Acts</h2>
           <p className="text-lg text-green-600 mb-4">
             We’re a passionate team of developers driven by the belief that technology can be a force for good.
             We are Luke, Conner, Maddy, Adam, and Kit—five individuals united by a common mission: to help people thrive in a fast-paced world.
