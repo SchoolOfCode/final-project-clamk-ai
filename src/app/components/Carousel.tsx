@@ -85,7 +85,7 @@ const Carousel = () => {
   ];
 
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
+    <div className="pb-40 h-screen w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
       <div className="relative w-full h-96 perspective">
         {/* Carousel container */}
         <div
@@ -105,23 +105,23 @@ const Carousel = () => {
             return (
               <div
                 key={index}
-                className={`absolute border-3 border-white top-0 left-0 right-0 mx-auto w-80 h-100 rounded-full shadow-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
+                className={`absolute border-3 border-custom-white top-0 left-0 right-0 mx-auto w-80 h-100 rounded-full shadow-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
                   completed[index]
-                    ? "bg-gradient-to-br from-green-700 to-green-900"
-                    : "bg-gradient-to-br from-emerald-400 to-emerald-700"
+                    ? "bg-radial from-emerald-700 from-40% to-emerald-900"
+                    : "bg-radial from-green-200 from-40% to-custom-green text-gray-600"
                 }`}
                 style={{
                   transform: `rotateY(${
                     index * 120
                   }deg) translateZ(${radius}px)`,
-                  opacity: isActive ? 1 : 0.1, // Active card has full opacity, others slightly dimmed
+                  opacity: isActive ? 1 : 0.2, // Active card has full opacity, others slightly dimmed
                 }}
               >
                 <div>
-                  <h2 className="text-2xl font-bold pt-25 text-center text-white mb-3">
+                  <h2 className="text-2xl font-bold pt-25 text-center mb-3">
                     {card.title}
                   </h2>
-                  <p className="text-white text-center">{card.content}</p>
+                  <p className="text-center">{card.content}</p>
                 </div>
                 <button
                   onClick={() => handleComplete(index)}
@@ -130,7 +130,7 @@ const Carousel = () => {
                     ${
                       completed[index]
                         ? "bg-green-100 text-green-800 cursor-not-allowed"
-                        : "bg-white hover:bg-gray-100 text-gray-800"
+                        : "bg-custom-white hover:bg-gray-100 text-gray-800"
                     } font-semibold flex items-center gap-2`}
                 >
                   {completed[index] ? (
@@ -153,14 +153,14 @@ const Carousel = () => {
         <button
           onClick={handlePrev}
           disabled={isTransitioning}
-          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 text-white py-2 px-6 rounded-full transition-colors"
+          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-full transition-colors"
         >
           Previous
         </button>
         <button
           onClick={handleNext}
           disabled={isTransitioning}
-          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 text-white py-2 px-6 rounded-full transition-colors"
+          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-full transition-colors"
         >
           Next
         </button>
