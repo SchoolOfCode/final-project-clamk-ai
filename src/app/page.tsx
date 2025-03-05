@@ -7,6 +7,7 @@ import { User } from "@supabase/supabase-js"; // Import the User type
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Carousel from "./components/Carousel";
+import PositiveQuotes from "./components/PositiveQuotes";
 import Navbar from "./components/Navbar";
 
 const Home = () => {
@@ -54,9 +55,11 @@ const Home = () => {
     return null;
   }
 
+
   return (
     <div className="bg-custom-green text-white min-h-screen">
       <Header />
+      <PositiveQuotes/>
       <Navbar />
       <Carousel />
       <div className="flex justify-end p-4">
