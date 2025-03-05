@@ -12,7 +12,7 @@ export default function Header() {
           height={300}
         />
 
-        <h2 className="text-2xl"> Welcome to Our App</h2>
+        <h2 className="text-2xl"> Welcome to Novari</h2>
       </main>
     </div>
   );
