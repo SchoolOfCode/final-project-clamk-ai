@@ -8,7 +8,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Carousel from "./components/Carousel";
 import PositiveQuotes from "./components/PositiveQuotes";
-import Navbar from "./components/Navbar";
+
 
 const Home = () => {
   const [user, setUser] = useState<User | null>(null); // Fix here
@@ -60,12 +60,11 @@ const Home = () => {
     <div className="bg-custom-green text-white min-h-screen">
       <Header />
       <PositiveQuotes/>
-      <Navbar />
       <Carousel />
-      <div className="flex justify-end p-4">
+      <div className="flex justify-center p-4">
         <button
           onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 mb-30"
         >
           Logout
         </button>
