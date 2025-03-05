@@ -1,8 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server.js";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -17,5 +14,3 @@ export async function GET() {
   console.log(JSON.stringify(data, null, 2));
   return NextResponse.json(data, { status: 200 });
 }
-
-GET();
