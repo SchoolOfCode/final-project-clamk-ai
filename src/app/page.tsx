@@ -5,9 +5,9 @@ import Navbar from "./components/Navbar";
 
 export default function Home() {
   return (
-    <div className="bg-custom-green text-white">
+    <div className="bg-custom-green text-custom-white">
       <Header />
-      <Navbar/>
+      <Navbar />
       <Carousel />
       <Footer />
     </div>
