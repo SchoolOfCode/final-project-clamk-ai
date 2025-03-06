@@ -52,7 +52,6 @@ const Home = () => {
     router.replace("/auth/signin");
     return null;
   }
-
   // const tasks: Task[] = []; // Initialize with an empty array
   // const selectedEmbers: string[] = []; // Initialize with an empty array
 
@@ -61,14 +60,17 @@ const Home = () => {
       <Header />
       <PositiveQuotes />
       <Carousel />
-      <div className="flex justify-center p-4">
+
+      <div className="absolute top-4 left-4">
         <button
           onClick={handleLogout}
-          className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 mb-30"
+          className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
         >
           Logout
         </button>
       </div>
+      <PositiveQuotes />
+      <Carousel />
       <Footer />
     </div>
   );
