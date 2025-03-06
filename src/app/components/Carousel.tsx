@@ -1,46 +1,40 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { supabase } from "../../lib/supabase"; // Import the initialized client
+import introJs from "intro.js";
 
 type Task = {
   id: number;
   name: string;
   content: string; // Add other fields as needed
+  completed: boolean;
 };
-// Remove the default intro.js CSS import
-// import "intro.js/introjs.css";
-import introJs from "intro.js";
 
-const Carousel = () => {
+type Profile = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  ember_preferences: string;
+};
+
+const Carousel = ({ userProfile }: { userProfile: Profile }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const embers = [
-  //   "Self-Awareness & Mindset",
-  //   "Emotional Intelligence & Relationships",
-  // ];
-  const embers = JSON.parse(localStorage.getItem("embers") || "");
-  // const [tasks, setCards] = useState<Task[]>([]);
-  const [completed, setCompleted] = useState<boolean[]>(
-    new Array(50).fill(false)
-  );
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [skipAnimation, setSkipAnimation] = useState(false);
   const [cards, setCards] = useState<Task[]>([]);
-  // const [embers]
 
   useEffect(() => {
     const fetchTasks = async () => {
-      if (embers.length === 0) {
-        setCards([]);
+      if (!userProfile) {
         return;
       }
-
       const { data, error } = await supabase
         .from("Tasks")
         .select("*")
-        .in("Ember Type", embers);
+        .in("Ember Type", userProfile.ember_preferences.split(","));
       console.log(data);
       if (error) {
         console.error("Error fetching tasks:", error);
@@ -50,20 +44,36 @@ const Carousel = () => {
             id: el.id,
             name: el[`Ember Type`],
             content: el[`Task Instructions`],
+            completed: false,
           };
         });
-        setCards(mappedData as Task[]);
+        // setCards(mappedData.slice(0, 3) as Task[]);
+        if (mappedData.length < 4) {
+          setCards(mappedData as Task[]);
+        } else {
+          const shuffleData = mappedData.sort(() => Math.random() - 0.5);
+          setCards(shuffleData.slice(0, 3) as Task[]);
+        }
       }
     };
 
     fetchTasks();
-  }, []);
+  }, [userProfile]);
 
-  // Handle card completion
-  const handleComplete = (index: number) => {
-    const newCompleted = [...completed];
-    newCompleted[index] = true;
-    setCompleted(newCompleted);
+  const handleComplete = (id: number) => {
+    console.log(id);
+    const modifiedCards = cards.map((card) => {
+      if (card.id !== id) {
+        return card;
+      } else {
+        return {
+          ...card,
+          completed: true,
+        };
+      }
+    });
+
+    setCards(modifiedCards);
   };
 
   // Move to next card
@@ -479,6 +489,7 @@ const Carousel = () => {
       }
     };
   }, []); // the tut only runs on mount
+  console.log(cards);
 
   return (
     <div className="pb-40 w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
@@ -494,7 +505,7 @@ const Carousel = () => {
           }}
         >
           {/* Generate all cards */}
-          {cards.map((task, index) => {
+          {cards.map((card, index) => {
             const radius = 265; // Distance from center - cards are closer together
             const isActive = index === currentIndex % cards.length;
 
@@ -502,7 +513,7 @@ const Carousel = () => {
               <div
                 key={index}
                 className={`absolute border-3 border-custom-white top-0 left-0 right-0 mx-auto w-80 h-100 rounded-full shadow-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
-                  completed[index]
+                  card.completed
                     ? "bg-radial from-emerald-700 from-40% to-emerald-900"
                     : "bg-radial from-green-200 from-40% to-custom-green text-gray-600"
                 }`}
@@ -515,24 +526,24 @@ const Carousel = () => {
               >
                 <div>
                   <h2 className="text-2xl font-bold pt-25 text-center mb-3">
-                    {task["name"]}
+                    {card["name"]}
                   </h2>
                   <p className="text-center" id="hero">
-                    {task.content}
+                    {card.content}
                   </p>
                 </div>
                 <button
                   id="complete"
-                  onClick={() => handleComplete(index)}
-                  disabled={completed[index]}
+                  onClick={() => handleComplete(card.id)}
+                  disabled={card.completed}
                   className={`mt-4 py-3 px-6 rounded-lg self-center transition-all duration-300 
                     ${
-                      completed[index]
+                      card.completed
                         ? "bg-green-100 text-green-800 cursor-not-allowed"
                         : "bg-custom-white hover:bg-gray-100 text-gray-800"
                     } font-semibold flex items-center gap-2`}
                 >
-                  {completed[index] ? (
+                  {card.completed ? (
                     <>
                       <Check className="text-green-600" size={20} />
                       <span>Completed</span>
