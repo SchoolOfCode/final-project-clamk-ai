@@ -27,7 +27,6 @@ export default function UserProfile() {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [showToast, setShowToast] = useState<boolean>(false);
 
   useEffect(() => {
     // We can safely perform our logic after the component is mounted on the client
