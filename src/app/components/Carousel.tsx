@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
+import "intro.js/introjs.css";
+import introJs, { IntroJs } from "intro.js";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -84,8 +86,43 @@ const Carousel = () => {
     },
   ];
 
+  // starts intro tut
+  useEffect(() => {
+    const intro: IntroJs = introJs();
+    intro.setOptions({
+      steps: [
+        {
+          element: document.getElementById("hero") as HTMLElement,
+          intro: "This is where your tasks are located.",
+          position: "top",
+        },
+        {
+          element: document.getElementById("complete") as HTMLElement,
+          intro: "Click here to mark the task as completed.",
+          position: "top",
+        },
+        {
+          element: document.getElementById("prevBtn") as HTMLElement,
+          intro: "Use this button to navigate to the previous task.",
+          position: "left",
+        },
+        {
+          element: document.getElementById("nextBtn") as HTMLElement,
+          intro: "Click here to move to the next task!",
+          position: "right",
+        },
+      ],
+      showProgress: true,
+      nextLabel: "Next",
+      prevLabel: "Back",
+      skipLabel: "Skip",
+    });
+
+    intro.start();
+  }, []); // the tut only runs on mount
+
   return (
-    <div className="pb-40 h-screen w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
+    <div className="pb-40 w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
       <div className="relative w-full h-96 perspective">
         {/* Carousel container */}
         <div
@@ -121,9 +158,12 @@ const Carousel = () => {
                   <h2 className="text-2xl font-bold pt-25 text-center mb-3">
                     {card.title}
                   </h2>
-                  <p className="text-center">{card.content}</p>
+                  <p className="text-center" id="hero">
+                    {card.content}
+                  </p>
                 </div>
                 <button
+                  id="complete"
                   onClick={() => handleComplete(index)}
                   disabled={completed[index]}
                   className={`mt-4 py-3 px-6 rounded-lg self-center transition-all duration-300 
@@ -151,6 +191,7 @@ const Carousel = () => {
       {/* Navigation controls */}
       <div className="mt-12 flex gap-6">
         <button
+          id="prevBtn"
           onClick={handlePrev}
           disabled={isTransitioning}
           className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-full transition-colors"
@@ -158,6 +199,7 @@ const Carousel = () => {
           Previous
         </button>
         <button
+          id="nextBtn"
           onClick={handleNext}
           disabled={isTransitioning}
           className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-full transition-colors"
