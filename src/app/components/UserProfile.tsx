@@ -10,7 +10,7 @@ export default function UserProfile() {
     <>
       <div className="bg-custom-green min-h-screen pt-20">
         <div className="max-w-2xl mx-auto px-4 py-8">
-          <div className="bg-white/20 rounded-lg shadow p-6">
+          <div className="bg-white/12 rounded-lg shadow p-6">
             <h1 className="text-2xl font-bold text-custom-white mb-6">
               User Profile
             </h1>
@@ -18,47 +18,47 @@ export default function UserProfile() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-custom-white mb-1">
                     First Name
                   </label>
-                  <p className="text-gray-800 p-2 bg-custom-green/50 rounded border border-gray-200">
+                  <p className="text-gray-800 p-2 bg-custom-white rounded border border-gray-200">
                     {user.firstName}
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-custom-whitemb-1">
                     Last Name
                   </label>
-                  <p className="text-gray-800 p-2 bg-custom-green/50 rounded border border-custom-white">
+                  <p className="text-gray-800 p-2 bg-custom-white rounded border border-custom-white">
                     {user.lastName}
                   </p>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-custom-white mb-1">
                   Email
                 </label>
-                <p className="text-gray-800 p-2 bg-custom-green/50 rounded border border-gray-200">
+                <p className="text-gray-800 p-2 bg-custom-white rounded border border-gray-200">
                   {user.email}
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-custom-white mb-1">
                   Phone
                 </label>
-                <p className="text-gray-800 p-2 bg-custom-green/50 rounded border border-gray-200">
+                <p className="text-gray-800 p-2 bg-custom-white rounded border border-gray-200">
                   {user.phone}
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-custom-white mb-1">
                   Location
                 </label>
-                <p className="text-gray-800 p-2 bg-custom-green/50 rounded border border-gray-200">
+                <p className="text-gray-800 p-2 bg-custom-white rounded border border-gray-200">
                   {user.location}
                 </p>
               </div>

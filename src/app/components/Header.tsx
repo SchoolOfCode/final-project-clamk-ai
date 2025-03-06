@@ -12,7 +12,7 @@ export default function Header() {
         {/* Container for logo and navbar with pill background */}
         <div className="relative flex flex-col items-center max-w-md mx-auto">
           {/* Pill-shaped background */}
-          <div className="absolute h-64 w-300 mt-3 bg-white/15 rounded-full"></div>
+          <div className="absolute h-64 w-300 mt-3 bg-custom-white/20 rounded-full"></div>
 
           {/* Logo */}
           <div className="flex justify-center scale-120 w-full pt-7 z-10">

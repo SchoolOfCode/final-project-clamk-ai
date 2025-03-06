@@ -26,18 +26,24 @@ const completedTasks: CompletedTasks[] = [
     taskInstructions:
       "Reflect on a challenging situation today—what did you learn from it?",
   },
+  {
+    id: 4,
+    emberType: "Self-Awareness & Mindset",
+    taskInstructions:
+      "Reflect on a challenging situation today—what did you learn from it?",
+  },
 ];
 
 export default function TaskHistory() {
   return (
     <div className="bg-custom-green min-h-screen flex flex-col">
       <Header />
-      <div className="flex-grow">
-        <h2 className="text-2xl text-custom-white font-bold text-center mt-20 mb-4">
+      <div className="flex-grow flex flex-col">
+        <h2 className="text-5xl pt-10 text-custom-white font-bold text-center mt-20 mb-20">
           Completed Tasks
         </h2>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-100 justify-items-center">
             {completedTasks.map((completedTask: CompletedTasks) => (
               <TaskHistoryCard
                 key={completedTask.id}
