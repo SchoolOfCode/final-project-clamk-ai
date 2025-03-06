@@ -9,7 +9,6 @@ import Footer from "./components/Footer";
 import Carousel from "./components/Carousel";
 import PositiveQuotes from "./components/PositiveQuotes";
 
-
 const Home = () => {
   const [user, setUser] = useState<User | null>(null); // Fix here
   const [loading, setLoading] = useState(true);
@@ -55,20 +54,19 @@ const Home = () => {
     return null;
   }
 
-
   return (
     <div className="bg-custom-green text-white min-h-screen">
       <Header />
-      <PositiveQuotes/>
-      <Carousel />
-      <div className="flex justify-center p-4">
+      <div className="absolute top-4 left-4">
         <button
           onClick={handleLogout}
-          className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 mb-30"
+          className="bg-emerald-700 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
         >
           Logout
         </button>
       </div>
+      <PositiveQuotes />
+      <Carousel />
       <Footer />
     </div>
   );

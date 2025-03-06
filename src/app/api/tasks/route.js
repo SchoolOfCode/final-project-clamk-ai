@@ -9,17 +9,17 @@ const supabase = createClient(
 
 // Define the GET handler for the API route
 export async function GET() {
-    const { data, error } = await supabase.from("Tasks").select("*");
+  const { data, error } = await supabase.from("Tasks").select("*");
 
-    if (error) {
-        return new NextResponse(
-            JSON.stringify({ error: "Supabase query failed" }),
-            { status: 500 }
-        );
-    }
+  if (error) {
+    return new NextResponse(
+      JSON.stringify({ error: "Supabase query failed" }),
+      { status: 500 }
+    );
+  }
 
-    console.log(JSON.stringify(data, null, 2));
-    return new NextResponse(JSON.stringify(data), { status: 200 });
+  console.log(JSON.stringify(data, null, 2));
+  return new NextResponse(JSON.stringify(data), { status: 200 });
 }
 
 console.log(GET()); // This is just for testing purposes
