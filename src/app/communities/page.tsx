@@ -24,7 +24,7 @@ export default function Communities() {
       try {
         setIsLoading(true);
         // Use the proper API endpoint path
-        const response = await fetch("/api/data");
+        const response = await fetch("/api/communities");
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
@@ -57,10 +57,10 @@ export default function Communities() {
       py-2 px-4 rounded-md 
       ${
         selectedEmberType === type
-          ? "bg-custom-green text-white"
-          : "bg-white text-custom-green"
+          ? "bg-emerald-800 text-white"
+          : "bg-custom-white text-custom-green"
       } 
-      hover:bg-custom-green hover:text-white transition-colors duration-300 ease-in-out
+      hover:bg-emerald-800 hover:text-white transition-colors duration-300 ease-in-out
     `;
   };
 
@@ -68,7 +68,7 @@ export default function Communities() {
     <div className="bg-custom-green min-h-screen text-white">
       <Header />
       <div className="container mx-auto py-6 px-4 pt-30 pb-30">
-        <h2 className="text-2xl text-custom-white font-bold mb-4">
+        <h2 className="text-3xl text-center text-custom-white font-bold mb-4">
           Communities
         </h2>
 
@@ -84,7 +84,7 @@ export default function Communities() {
                   setSelectedEmberType("Self-Awareness and Mindset")
                 }
               >
-                Self-Awareness and Mindset
+                Self Awareness and Mindset
               </button>
               <button
                 className={getButtonClasses(
