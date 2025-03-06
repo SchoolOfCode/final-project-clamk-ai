@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { NextResponse } from "next/server.js";
+import { NextResponse } from "next/server";
 import dotenv from "dotenv";
 
 dotenv.config();
