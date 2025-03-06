@@ -10,24 +10,25 @@ type Task = {
   content: string; // Add other fields as needed
 };
 
-const Carousel = ({
-  tasks,
-  selectedEmbers,
-}: {
-  tasks: Task[];
-  selectedEmbers: string[];
-}) => {
+const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  // const embers = [
+  //   "Self-Awareness & Mindset",
+  //   "Emotional Intelligence & Relationships",
+  // ];
+  const embers = JSON.parse(localStorage.getItem("embers") || "");
+  // const [tasks, setCards] = useState<Task[]>([]);
   const [completed, setCompleted] = useState<boolean[]>(
-    new Array(tasks.length).fill(false)
+    new Array(50).fill(false)
   );
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [skipAnimation, setSkipAnimation] = useState(false);
-  const [cards, setCards] = useState<Task[]>(tasks);
+  const [cards, setCards] = useState<Task[]>([]);
+  // const [embers]
 
   useEffect(() => {
     const fetchTasks = async () => {
-      if (selectedEmbers.length === 0) {
+      if (embers.length === 0) {
         setCards([]);
         return;
       }
@@ -35,17 +36,24 @@ const Carousel = ({
       const { data, error } = await supabase
         .from("Tasks")
         .select("*")
-        .in("Ember Type", selectedEmbers);
-
+        .in("Ember Type", embers);
+      console.log(data);
       if (error) {
         console.error("Error fetching tasks:", error);
       } else {
-        setCards(data as Task[]);
+        const mappedData = data.map((el) => {
+          return {
+            id: el.id,
+            name: el[`Ember Type`],
+            content: el[`Task Instructions`],
+          };
+        });
+        setCards(mappedData as Task[]);
       }
     };
 
     fetchTasks();
-  }, [selectedEmbers]);
+  }, []);
 
   // Handle card completion
   const handleComplete = (index: number) => {
@@ -141,7 +149,7 @@ const Carousel = ({
               >
                 <div>
                   <h2 className="text-2xl font-bold pt-25 text-center mb-3">
-                    {task.name}
+                    {task["name"]}
                   </h2>
                   <p className="text-center">{task.content}</p>
                 </div>

@@ -38,25 +38,27 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      if (selectedEmbers.length === 0) {
-        setTasks([]);
-        return;
-      }
+    // const fetchTasks = async () => {
+    //   if (selectedEmbers.length === 0) {
+    //     setTasks([]);
+    //     return;
+    //   }
 
-      const { data, error } = await supabase
-        .from("Tasks")
-        .select("*")
-        .in("Ember Type", selectedEmbers);
+    //   const { data, error } = await supabase
+    //     .from("Tasks")
+    //     .select("*")
+    //     .in("Ember Type", selectedEmbers);
+    //   console.log(data);
+    //   if (error) {
+    //     console.error("Error fetching tasks:", error);
+    //   } else {
+    //     setTasks(data as Task[]);
+    //     localStorage.setItem("tasks", JSON.stringify(data))
+    //   }
+    // };
 
-      if (error) {
-        console.error("Error fetching tasks:", error);
-      } else {
-        setTasks(data as Task[]);
-      }
-    };
-
-    fetchTasks();
+    // fetchTasks();
+    localStorage.setItem("embers", JSON.stringify(selectedEmbers));
   }, [selectedEmbers]);
 
   return (
