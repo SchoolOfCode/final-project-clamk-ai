@@ -6,16 +6,16 @@ export default function Header() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] bg-custom-green items-center text-white justify-items-center p-8 pt-30 font-[family-name:var(--font-geist-sans)]">
       <div className="absolute top-0 right-0 mt-8 mr-8">
-        <StreakCounter/>
+        <StreakCounter />
       </div>
       <main className="flex flex-col items-center w-full">
         {/* Container for logo and navbar with pill background */}
         <div className="relative flex flex-col items-center max-w-md mx-auto">
           {/* Pill-shaped background */}
-          <div className="absolute h-56 w-180 mt-8 bg-white/15 rounded-full"></div>
+          <div className="absolute h-64 w-300 mt-3 bg-white/15 rounded-full"></div>
 
           {/* Logo */}
-          <div className="flex justify-center w-full pt-7 z-10">
+          <div className="flex justify-center scale-120 w-full pt-7 z-10">
             <Image
               className="dark:invert"
               src="/images/novari-logo.png"
