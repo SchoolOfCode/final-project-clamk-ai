@@ -2,21 +2,78 @@
 
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
-// Remove the default intro.js CSS import
-// import "intro.js/introjs.css";
+import { supabase } from "../../lib/supabase"; // Import the initialized client
 import introJs from "intro.js";
 
-const Carousel = () => {
+type Task = {
+  id: number;
+  name: string;
+  content: string; // Add other fields as needed
+  completed: boolean;
+};
+
+type Profile = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  ember_preferences: string;
+};
+
+const Carousel = ({ userProfile }: { userProfile: Profile }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [completed, setCompleted] = useState([false, false, false]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [skipAnimation, setSkipAnimation] = useState(false);
+  const [cards, setCards] = useState<Task[]>([]);
 
-  // Handle card completion
-  const handleComplete = (index: number) => {
-    const newCompleted = [...completed];
-    newCompleted[index] = true;
-    setCompleted(newCompleted);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      if (!userProfile) {
+        return;
+      }
+      const { data, error } = await supabase
+        .from("Tasks")
+        .select("*")
+        .in("Ember Type", userProfile.ember_preferences.split(","));
+      console.log(data);
+      if (error) {
+        console.error("Error fetching tasks:", error);
+      } else {
+        const mappedData = data.map((el) => {
+          return {
+            id: el.id,
+            name: el[`Ember Type`],
+            content: el[`Task Instructions`],
+            completed: false,
+          };
+        });
+        // setCards(mappedData.slice(0, 3) as Task[]);
+        if (mappedData.length < 4) {
+          setCards(mappedData as Task[]);
+        } else {
+          const shuffleData = mappedData.sort(() => Math.random() - 0.5);
+          setCards(shuffleData.slice(0, 3) as Task[]);
+        }
+      }
+    };
+
+    fetchTasks();
+  }, [userProfile]);
+
+  const handleComplete = (id: number) => {
+    console.log(id);
+    const modifiedCards = cards.map((card) => {
+      if (card.id !== id) {
+        return card;
+      } else {
+        return {
+          ...card,
+          completed: true,
+        };
+      }
+    });
+
+    setCards(modifiedCards);
   };
 
   // Move to next card
@@ -24,10 +81,10 @@ const Carousel = () => {
     if (isTransitioning) return;
 
     // Handle transition from last to first card
-    if (currentIndex === 2) {
+    if (currentIndex === cards.length - 1) {
       setIsTransitioning(true);
       // First set to an intermediate position
-      setCurrentIndex(3);
+      setCurrentIndex(cards.length);
 
       // After animation completes, reset to position 0 without animation
       setTimeout(() => {
@@ -55,10 +112,10 @@ const Carousel = () => {
       // First set to an intermediate position
       setCurrentIndex(-1);
 
-      // After animation completes, reset to position 2 without animation
+      // After animation completes, reset to position cards.length - 1 without animation
       setTimeout(() => {
         setSkipAnimation(true);
-        setCurrentIndex(2);
+        setCurrentIndex(cards.length - 1);
 
         // Re-enable animations after the reset
         setTimeout(() => {
@@ -70,22 +127,6 @@ const Carousel = () => {
       setCurrentIndex((prev) => prev - 1);
     }
   };
-
-  // Card content
-  const cards = [
-    {
-      title: "First Task",
-      content: "This is the content for the first task in the carousel",
-    },
-    {
-      title: "Second Task",
-      content: "This is the content for the second task in the carousel",
-    },
-    {
-      title: "Third Task",
-      content: "This is the content for the third task in the carousel",
-    },
-  ];
 
   // starts intro tut with custom styling
   useEffect(() => {
@@ -448,6 +489,7 @@ const Carousel = () => {
       }
     };
   }, []); // the tut only runs on mount
+  console.log(cards);
 
   return (
     <div className="pb-40 w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
@@ -462,16 +504,16 @@ const Carousel = () => {
             transform: `rotateY(${currentIndex * -120}deg)`,
           }}
         >
-          {/* Generate all three cards */}
+          {/* Generate all cards */}
           {cards.map((card, index) => {
             const radius = 265; // Distance from center - cards are closer together
-            const isActive = index === currentIndex % 3;
+            const isActive = index === currentIndex % cards.length;
 
             return (
               <div
                 key={index}
                 className={`absolute border-3 border-custom-white top-0 left-0 right-0 mx-auto w-80 h-100 rounded-full shadow-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
-                  completed[index]
+                  card.completed
                     ? "bg-radial from-emerald-700 from-40% to-emerald-900"
                     : "bg-radial from-green-200 from-40% to-custom-green text-gray-600"
                 }`}
@@ -484,7 +526,7 @@ const Carousel = () => {
               >
                 <div>
                   <h2 className="text-2xl font-bold pt-25 text-center mb-3">
-                    {card.title}
+                    {card["name"]}
                   </h2>
                   <p className="text-center" id="hero">
                     {card.content}
@@ -492,16 +534,16 @@ const Carousel = () => {
                 </div>
                 <button
                   id="complete"
-                  onClick={() => handleComplete(index)}
-                  disabled={completed[index]}
+                  onClick={() => handleComplete(card.id)}
+                  disabled={card.completed}
                   className={`mt-4 py-3 px-6 rounded-lg self-center transition-all duration-300 
                     ${
-                      completed[index]
+                      card.completed
                         ? "bg-green-100 text-green-800 cursor-not-allowed"
                         : "bg-custom-white hover:bg-gray-100 text-gray-800"
                     } font-semibold flex items-center gap-2`}
                 >
-                  {completed[index] ? (
+                  {card.completed ? (
                     <>
                       <Check className="text-green-600" size={20} />
                       <span>Completed</span>
