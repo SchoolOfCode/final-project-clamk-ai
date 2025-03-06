@@ -6,6 +6,7 @@ import CommunityCard from "../components/CommunityCard";
 import { useState, useEffect } from "react";
 
 interface Community {
+interface Community {
   id: number;
   name: string;
   purpose: string;
@@ -19,7 +20,6 @@ export default function Communities() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // DO NOT REMOVE USEEFFECT- THIS STOPS IT SENDING ABOUT 4000000000 REQUESTS TO THE SERVER THANKS
   useEffect(() => {
     async function fetchCommunities() {
       try {
@@ -43,6 +43,7 @@ export default function Communities() {
         setIsLoading(false);
       }
     }
+
 
     fetchCommunities();
   }, []);
