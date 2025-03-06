@@ -9,7 +9,6 @@ import Footer from "./components/Footer";
 import Carousel from "./components/Carousel";
 import PositiveQuotes from "./components/PositiveQuotes";
 
-
 const Home = () => {
   const [user, setUser] = useState<User | null>(null); // Fix here
   const [loading, setLoading] = useState(true);
@@ -55,11 +54,10 @@ const Home = () => {
     return null;
   }
 
-
   return (
     <div className="bg-custom-green text-white min-h-screen">
       <Header />
-      <PositiveQuotes/>
+      <PositiveQuotes />
       <Carousel />
       <div className="flex justify-center p-4">
         <button

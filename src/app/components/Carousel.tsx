@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 
 const Carousel = () => {
@@ -8,6 +8,8 @@ const Carousel = () => {
   const [completed, setCompleted] = useState([false, false, false]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [skipAnimation, setSkipAnimation] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Handle card completion
   const handleComplete = (index: number) => {
@@ -68,21 +70,46 @@ const Carousel = () => {
     }
   };
 
-  // Card content
-  const cards = [
-    {
-      title: "First Task",
-      content: "This is the content for the first task in the carousel",
-    },
-    {
-      title: "Second Task",
-      content: "This is the content for the second task in the carousel",
-    },
-    {
-      title: "Third Task",
-      content: "This is the content for the third task in the carousel",
-    },
-  ];
+  useEffect(() => {
+    async function fetchTasks() {
+      setIsLoading(true);
+      // Use the proper API endpoint path
+      const response = await fetch("/api/tasks");
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setTasks(data);
+      console.log(data);
+
+      setIsLoading(false);
+    }
+
+    fetchTasks();
+  }, []);
+
+  // Create cards array from the first 3 tasks in the API response
+  const cards = isLoading
+    ? [
+        { title: "Loading...", content: "Loading task content..." },
+        { title: "Loading...", content: "Loading task content..." },
+        { title: "Loading...", content: "Loading task content..." },
+      ]
+    : [
+        {
+          title: tasks[0]?.["Ember Type"] || "Task 1",
+          content: tasks[0]?.["Task Instructions"] || "No content available",
+        },
+        {
+          title: tasks[1]?.["Ember Type"] || "Task 2",
+          content: tasks[1]?.["Task Instructions"] || "No content available",
+        },
+        {
+          title: tasks[2]?.["Ember Type"] || "Task 3",
+          content: tasks[2]?.["Task Instructions"] || "No content available",
+        },
+      ];
 
   return (
     <div className="pb-40 h-screen w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
