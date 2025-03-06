@@ -6,7 +6,6 @@ import CommunityCard from "../components/CommunityCard";
 import { useState, useEffect } from "react";
 
 interface Community {
-interface Community {
   id: number;
   name: string;
   purpose: string;
@@ -43,7 +42,6 @@ export default function Communities() {
         setIsLoading(false);
       }
     }
-
 
     fetchCommunities();
   }, []);
