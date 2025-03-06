@@ -1,13 +1,51 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
+import { supabase } from "../../lib/supabase"; // Import the initialized client
 
-const Carousel = () => {
+type Task = {
+  id: number;
+  name: string;
+  content: string; // Add other fields as needed
+};
+
+const Carousel = ({
+  tasks,
+  selectedEmbers,
+}: {
+  tasks: Task[];
+  selectedEmbers: string[];
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [completed, setCompleted] = useState([false, false, false]);
+  const [completed, setCompleted] = useState<boolean[]>(
+    new Array(tasks.length).fill(false)
+  );
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [skipAnimation, setSkipAnimation] = useState(false);
+  const [cards, setCards] = useState<Task[]>(tasks);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      if (selectedEmbers.length === 0) {
+        setCards([]);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("Tasks")
+        .select("*")
+        .in("Ember Type", selectedEmbers);
+
+      if (error) {
+        console.error("Error fetching tasks:", error);
+      } else {
+        setCards(data as Task[]);
+      }
+    };
+
+    fetchTasks();
+  }, [selectedEmbers]);
 
   // Handle card completion
   const handleComplete = (index: number) => {
@@ -21,10 +59,10 @@ const Carousel = () => {
     if (isTransitioning) return;
 
     // Handle transition from last to first card
-    if (currentIndex === 2) {
+    if (currentIndex === cards.length - 1) {
       setIsTransitioning(true);
       // First set to an intermediate position
-      setCurrentIndex(3);
+      setCurrentIndex(cards.length);
 
       // After animation completes, reset to position 0 without animation
       setTimeout(() => {
@@ -52,10 +90,10 @@ const Carousel = () => {
       // First set to an intermediate position
       setCurrentIndex(-1);
 
-      // After animation completes, reset to position 2 without animation
+      // After animation completes, reset to position cards.length - 1 without animation
       setTimeout(() => {
         setSkipAnimation(true);
-        setCurrentIndex(2);
+        setCurrentIndex(cards.length - 1);
 
         // Re-enable animations after the reset
         setTimeout(() => {
@@ -67,22 +105,6 @@ const Carousel = () => {
       setCurrentIndex((prev) => prev - 1);
     }
   };
-
-  // Card content
-  const cards = [
-    {
-      title: "First Task",
-      content: "This is the content for the first task in the carousel",
-    },
-    {
-      title: "Second Task",
-      content: "This is the content for the second task in the carousel",
-    },
-    {
-      title: "Third Task",
-      content: "This is the content for the third task in the carousel",
-    },
-  ];
 
   return (
     <div className="pb-40 h-screen w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
@@ -97,10 +119,10 @@ const Carousel = () => {
             transform: `rotateY(${currentIndex * -120}deg)`,
           }}
         >
-          {/* Generate all three cards */}
-          {cards.map((card, index) => {
+          {/* Generate all cards */}
+          {cards.map((task, index) => {
             const radius = 265; // Distance from center - cards are closer together
-            const isActive = index === currentIndex % 3;
+            const isActive = index === currentIndex % cards.length;
 
             return (
               <div
@@ -119,9 +141,9 @@ const Carousel = () => {
               >
                 <div>
                   <h2 className="text-2xl font-bold pt-25 text-center mb-3">
-                    {card.title}
+                    {task.name}
                   </h2>
-                  <p className="text-center">{card.content}</p>
+                  <p className="text-center">{task.content}</p>
                 </div>
                 <button
                   onClick={() => handleComplete(index)}

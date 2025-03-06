@@ -9,6 +9,11 @@ import Footer from "./components/Footer";
 import Carousel from "./components/Carousel";
 import PositiveQuotes from "./components/PositiveQuotes";
 
+type Task = {
+  id: number;
+  name: string;
+  content: string; // Add other fields as needed
+};
 
 const Home = () => {
   const [user, setUser] = useState<User | null>(null); // Fix here
@@ -55,12 +60,14 @@ const Home = () => {
     return null;
   }
 
+  const tasks: Task[] = []; // Initialize with an empty array
+  const selectedEmbers: string[] = []; // Initialize with an empty array
 
   return (
     <div className="bg-custom-green text-white min-h-screen">
       <Header />
-      <PositiveQuotes/>
-      <Carousel />
+      <PositiveQuotes />
+      <Carousel tasks={tasks} selectedEmbers={selectedEmbers} />
       <div className="flex justify-center p-4">
         <button
           onClick={handleLogout}
