@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import "intro.js/introjs.css";
-import introJs, { IntroJs } from "intro.js";
+import introJs from "intro.js";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -88,7 +88,7 @@ const Carousel = () => {
 
   // starts intro tut
   useEffect(() => {
-    const intro: IntroJs = introJs();
+    const intro = introJs();
     intro.setOptions({
       steps: [
         {
