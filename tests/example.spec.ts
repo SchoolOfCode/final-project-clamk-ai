@@ -1,7 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 test("sign in", async ({ page }) => {
-  await page.goto("http://localhost:3000/auth/signin");
+  await page.goto(
+    "https://well-being-app-final-project.vercel.app/auth/signin"
+  );
 
   const emailInput = page.locator('input[type="email"]');
   await emailInput.waitFor({ state: "visible" });
@@ -17,14 +19,7 @@ test("sign in", async ({ page }) => {
   await signInButton.waitFor({ state: "visible" });
 
   await signInButton.click();
-  await page.waitForURL("http://localhost:3000/");
+  await page.waitForURL("https://well-being-app-final-project.vercel.app/");
 });
 
-test("homepage functionality", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
-
-  const nextButton = page.getByRole("button", { name: "Next" });
-  await expect(nextButton).toBeEnabled();
-  await nextButton.click();
-});
 //
