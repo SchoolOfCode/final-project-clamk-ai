@@ -74,6 +74,7 @@ We welcome contributions from the community! If you'd like to contribute, please
 ## Links
 - [Novari](https://well-being-app-final-project.vercel.app/auth/signin)
 - [Presentation Slides](https://www.canva.com/design/DAGg--cQNLc/Y9WP7dp88ABfBhE-rwA8HA/edit)
+- [LinkedIn - Adam](https://www.linkedin.com/in/adam-hemmings-75b71b55/)
 
 
 If you have any questions or feedback, please reach out to us at kitjonesuk@gmail.com
