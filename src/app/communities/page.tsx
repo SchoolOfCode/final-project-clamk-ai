@@ -11,13 +11,18 @@ interface Community {
   purpose: string;
   link: string;
   ember_type: string;
+  region: string; // Added region property
 }
 
 export default function Communities() {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [selectedEmberType, setSelectedEmberType] = useState<string>("");
+  const [selectedRegion, setSelectedRegion] = useState<string>(""); // New state for region filter
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Available regions
+  const regions = ["Online", "London", "West Midlands", "Somerset"];
 
   useEffect(() => {
     async function fetchCommunities() {
@@ -46,11 +51,16 @@ export default function Communities() {
     fetchCommunities();
   }, []);
 
-  const filteredCommunities = selectedEmberType
-    ? communities.filter(
-        (community) => community.ember_type === selectedEmberType
-      )
-    : communities;
+  // Filter communities by both ember_type and region
+  const filteredCommunities = communities.filter((community) => {
+    const matchesEmberType = selectedEmberType
+      ? community.ember_type === selectedEmberType
+      : true;
+    const matchesRegion = selectedRegion
+      ? community.region === selectedRegion
+      : true;
+    return matchesEmberType && matchesRegion;
+  });
 
   const getButtonClasses = (type: string) => {
     return `
@@ -58,25 +68,22 @@ export default function Communities() {
       ${
         selectedEmberType === type
           ? "bg-emerald-800 text-white"
-          : "bg-custom-white text-custom-green"
+          : "bg-custom-white text-emerald-900"
       } 
       hover:bg-emerald-800 hover:text-white transition-colors duration-300 ease-in-out
     `;
   };
 
   return (
-    <div className="bg-custom-green min-h-screen text-white">
+    <div className="bg-custom-green min-h-screen text-white flex flex-col">
       <Header />
-      <div className="container mx-auto py-6 px-4 pt-30 pb-30">
-        <h2 className="text-3xl text-center text-custom-white font-bold mb-4">
+      <div className="container mx-auto py-6 px-4 pt-30 pb-30 flex-grow">
+        <h2 className="text-5xl text-center text-custom-white font-bold mb-4">
           Communities
         </h2>
 
         {isLoading && (
-          <div
-            className="flex justify-center items-center absolute inset-0"
-            role="status"
-          >
+          <div className="flex justify-center items-center py-20" role="status">
             <svg
               aria-hidden="true"
               className="w-20 h-20 text-gray-200 animate-spin dark:text-gray-600 fill-green-500"
@@ -100,55 +107,90 @@ export default function Communities() {
 
         {!isLoading && !error && (
           <>
-            <div className="flex flex-wrap gap-4 mb-6">
-              <button
-                className={getButtonClasses("Self-Awareness and Mindset")}
-                onClick={() =>
-                  setSelectedEmberType("Self-Awareness and Mindset")
-                }
-              >
-                Self Awareness and Mindset
-              </button>
-              <button
-                className={getButtonClasses(
-                  "Emotional Intelligence and Relationships"
-                )}
-                onClick={() =>
-                  setSelectedEmberType(
-                    "Emotional Intelligence and Relationships"
-                  )
-                }
-              >
-                Emotional Intelligence and Relationships
-              </button>
-              <button
-                className={getButtonClasses("Skill Development and Knowledge")}
-                onClick={() =>
-                  setSelectedEmberType("Skill Development and Knowledge")
-                }
-              >
-                Skill Development and Knowledge
-              </button>
-              <button
-                className={getButtonClasses("Health and Wellbeing")}
-                onClick={() => setSelectedEmberType("Health and Wellbeing")}
-              >
-                Health and Wellbeing
-              </button>
-              <button
-                className={getButtonClasses("Purpose and Goal Setting")}
-                onClick={() => setSelectedEmberType("Purpose and Goal Setting")}
-              >
-                Purpose and Goal Setting
-              </button>
-              <button
-                className={getButtonClasses("")}
-                onClick={() => setSelectedEmberType("")}
-              >
-                Clear Filter
-              </button>
+            {/* Filter controls section */}
+            <div className="mb-8">
+              {/* Ember Type Filter Buttons */}
+              <div className="mb-6">
+                <h3 className="text-xl text-custom-white font-semibold mb-2">
+                  Filter by Ember Type
+                </h3>
+                <div className="flex flex-wrap gap-4">
+                  <button
+                    className={getButtonClasses("Self-Awareness and Mindset")}
+                    onClick={() =>
+                      setSelectedEmberType("Self-Awareness and Mindset")
+                    }
+                  >
+                    Self Awareness and Mindset
+                  </button>
+                  <button
+                    className={getButtonClasses(
+                      "Emotional Intelligence and Relationships"
+                    )}
+                    onClick={() =>
+                      setSelectedEmberType(
+                        "Emotional Intelligence and Relationships"
+                      )
+                    }
+                  >
+                    Emotional Intelligence and Relationships
+                  </button>
+                  <button
+                    className={getButtonClasses(
+                      "Skill Development and Knowledge"
+                    )}
+                    onClick={() =>
+                      setSelectedEmberType("Skill Development and Knowledge")
+                    }
+                  >
+                    Skill Development and Knowledge
+                  </button>
+                  <button
+                    className={getButtonClasses("Health and Wellbeing")}
+                    onClick={() => setSelectedEmberType("Health and Wellbeing")}
+                  >
+                    Health and Wellbeing
+                  </button>
+                  <button
+                    className={getButtonClasses("Purpose and Goal Setting")}
+                    onClick={() =>
+                      setSelectedEmberType("Purpose and Goal Setting")
+                    }
+                  >
+                    Purpose and Goal Setting
+                  </button>
+                  <button
+                    className={getButtonClasses("")}
+                    onClick={() => setSelectedEmberType("")}
+                  >
+                    Clear Ember Filter
+                  </button>
+                </div>
+              </div>
+
+              {/* Region Filter Dropdown */}
+              <div>
+                <h3 className="text-xl text-custom-white font-semibold mb-2">
+                  Filter by Region
+                </h3>
+                <div className="max-w-xs">
+                  <select
+                    className="w-full bg-custom-white text-emerald-900 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                  >
+                    <option value="">All Regions</option>
+                    {regions.map((region) => (
+                      <option key={region} value={region}>
+                        {region}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
 
+            {/* Community Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredCommunities.map((community) => (
                 <CommunityCard
@@ -159,6 +201,15 @@ export default function Communities() {
                 />
               ))}
             </div>
+
+            {/* No results message */}
+            {filteredCommunities.length === 0 && (
+              <div className="text-center py-8">
+                <p className="text-xl text-custom-white">
+                  No communities found with the selected filters.
+                </p>
+              </div>
+            )}
           </>
         )}
       </div>
