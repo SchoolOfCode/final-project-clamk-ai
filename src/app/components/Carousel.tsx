@@ -169,9 +169,10 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
       z-index: 9999998;
       border-radius: 12px; /* Rounded corners like the Novari UI */
       transition: all .3s ease-out;
-      background-color: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(121, 169, 135, 0.3);
-      box-shadow: 0 0 15px rgba(121, 169, 135, 0.4);
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(121, 169, 135, 0.1);
+      box-shadow: 0 0 15px rgba(121, 169, 135, 0.);
+      
     }
     
     .introjs-helperLayer *,
@@ -237,6 +238,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
       position: absolute;
       visibility: visible;
       background-color: #ffffff; /* White background as requested */
+      opacity:2%;
       min-width: 250px;
       max-width: 300px;
       border-radius: 12px; /* Rounded corners like Novari UI */
@@ -340,11 +342,12 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
       height: 30px; /* Smaller height */
       line-height: 30px; /* Adjust line height to match new height */
       color: #4e7c59; /* Dark green */
-      font-size: 18px; /* Smaller font size */
+      font-size: 16px; /* Smaller font size */
       cursor: pointer;
       font-weight: 700;
       text-align: center;
       text-decoration: none;
+      opacity: 50%
     }
     
     .introjs-skipbutton:hover,
@@ -458,11 +461,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
           intro: "This is where your tasks are located.",
           position: "top",
         },
-        {
-          element: document.getElementById("complete") as HTMLElement,
-          intro: "Click here to mark the task as completed.",
-          position: "top",
-        },
+
         {
           element: document.getElementById("prevBtn") as HTMLElement,
           intro: "Use this button to navigate to the previous task.",
@@ -480,7 +479,25 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
       skipLabel: "Skip",
     });
 
-    intro.start();
+    // Add a timeout to ensure DOM elements are fully rendered before starting the tutorial
+    setTimeout(() => {
+      // Check if elements exist before starting the tutorial
+      const heroElement = document.getElementById("hero");
+      const completeElement = document.getElementById("complete");
+      const prevBtnElement = document.getElementById("prevBtn");
+      const nextBtnElement = document.getElementById("nextBtn");
+
+      if (heroElement && completeElement && prevBtnElement && nextBtnElement) {
+        intro.start();
+      } else {
+        console.error("Required DOM elements for tutorial not found:", {
+          hero: !!heroElement,
+          complete: !!completeElement,
+          prevBtn: !!prevBtnElement,
+          nextBtn: !!nextBtnElement,
+        });
+      }
+    }, 1000); // 2 second delay
 
     // Clean up the style element when the component unmounts
     return () => {
@@ -493,7 +510,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
 
   return (
     <div className="pb-40 w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
-      <div className="relative w-full h-96 perspective">
+      <div id="hero" className="relative w-full h-96 perspective">
         {/* Carousel container */}
         <div
           className={`absolute w-full h-full ${
@@ -512,7 +529,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
             return (
               <div
                 key={index}
-                className={`absolute border-3 border-custom-white top-0 left-0 right-0 mx-auto w-80 h-100 rounded-full shadow-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
+                className={`absolute top-0 left-0 right-0 mx-auto w-80 h-100 rounded-full shadow-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
                   card.completed
                     ? "bg-radial from-emerald-700 from-40% to-emerald-900"
                     : "bg-radial from-green-200 from-40% to-custom-green text-gray-600"
@@ -528,19 +545,17 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
                   <h2 className="text-2xl font-bold pt-25 text-center mb-3">
                     {card["name"]}
                   </h2>
-                  <p className="text-center" id="hero">
-                    {card.content}
-                  </p>
+                  <p className="text-center">{card.content}</p>
                 </div>
                 <button
-                  id="complete"
+                  id={isActive ? "complete" : ""}
                   onClick={() => handleComplete(card.id)}
                   disabled={card.completed}
                   className={`mt-4 py-3 px-6 rounded-lg self-center transition-all duration-300 
                     ${
                       card.completed
                         ? "bg-green-100 text-green-800 cursor-not-allowed"
-                        : "bg-custom-white hover:bg-gray-100 text-gray-800"
+                        : "bg-emerald-700 hover:bg-emerald-800 text-custom-white"
                     } font-semibold flex items-center gap-2`}
                 >
                   {card.completed ? (
@@ -564,17 +579,17 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
           id="prevBtn"
           onClick={handlePrev}
           disabled={isTransitioning}
-          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-full transition-colors"
+          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-xl transition-colors text-2xl"
         >
-          Previous
+          ←
         </button>
         <button
           id="nextBtn"
           onClick={handleNext}
           disabled={isTransitioning}
-          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-full transition-colors"
+          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-xl transition-colors text-2xl"
         >
-          Next
+          →
         </button>
       </div>
     </div>
