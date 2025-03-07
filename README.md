@@ -78,6 +78,7 @@ We welcome contributions from the community! If you'd like to contribute, please
 - [LinkedIn - Luke](https://www.linkedin.com/in/luke-davies-296013254/)
 - [LinkedIn - Conner](https://www.linkedin.com/in/conner-adamsons-0986352a7/)
 - [LinkedIn - Kit](https://www.linkedin.com/in/kit-jones-64926a2aa/)
+- [LinkedIn - Maddy](https://www.linkedin.com/in/madeleine-walsh-81737498/)
 
 
 If you have any questions or feedback, please reach out to us at kitjonesuk@gmail.com
