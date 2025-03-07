@@ -115,7 +115,7 @@ export default function UserProfile() {
                 <input
                   name="firstName"
                   type="text"
-                  className="text-gray-800 p-2 bg-custom-green/50 rounded border border-gray-200"
+                  className="text-gray-800 p-2 bg-custom-white rounded border border-gray-200"
                   onChange={handleTextInputChange}
                   value={firstName}
                 />
@@ -128,7 +128,7 @@ export default function UserProfile() {
                 <input
                   name="lastName"
                   type="text"
-                  className="text-gray-800 p-2 bg-custom-green/50 rounded border border-custom-white"
+                  className="text-gray-800 p-2 bg-custom-white rounded border border-custom-white"
                   onChange={handleTextInputChange}
                   value={lastName}
                 />
@@ -142,7 +142,7 @@ export default function UserProfile() {
               <input
                 name="email"
                 type="text"
-                className="text-gray-800 p-2 bg-custom-green/50 rounded border border-gray-200"
+                className="text-gray-800 p-2 bg-custom-white rounded border border-gray-200"
                 onChange={handleTextInputChange}
                 value={email}
               />
@@ -193,10 +193,10 @@ export default function UserProfile() {
 
           <div className="mt-8">
             <button
-              className="w-full py-2 px-4 rounded bg-green-200 text-gray-700 font-medium shadow-sm hover:text-custom-white hover:bg-custom-green"
+              className="w-full py-2 px-4 rounded bg-emerald-700 text-custom-white font-medium shadow-sm hover:text-custom-white hover:bg-emerald-800"
               onClick={handleFormSubmit}
             >
-              Edit Profile
+              Save Profile
             </button>
           </div>
           {/* 

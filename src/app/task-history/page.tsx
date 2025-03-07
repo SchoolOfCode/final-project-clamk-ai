@@ -39,11 +39,11 @@ export default function TaskHistory() {
     <div className="bg-custom-green min-h-screen flex flex-col">
       <Header />
       <div className="flex-grow flex flex-col">
-        <h2 className="text-5xl pt-10 text-custom-white font-bold text-center mt-20 mb-20">
+        <h2 className="text-5xl pt-20 text-custom-white font-bold text-center mt-10 mb-10">
           Completed Tasks
         </h2>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-100 justify-items-center">
+          <div className="flex flex-col space-y-4 items-center">
             {completedTasks.map((completedTask: CompletedTasks) => (
               <TaskHistoryCard
                 key={completedTask.id}

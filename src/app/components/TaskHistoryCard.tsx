@@ -1,3 +1,4 @@
+// TaskHistoryCard.tsx
 interface TaskHistoryCardProps {
   emberType: string;
   taskInstructions: string;
@@ -8,9 +9,16 @@ export default function TaskHistoryCard({
   taskInstructions,
 }: TaskHistoryCardProps) {
   return (
-    <div className="bg-custom-white border-3 border-emerald-300/30 text-custom-green rounded-2xl shadow p-4 m-2 hover:scale-103 hover:shadow-xl hover:rotate-1 transition-scale-shadow duration-100 ease-out h-64 w-90 flex flex-col justify-between items-center">
-      <h3 className="font-bold text-black text-center p-3">{emberType}</h3>
-      <p className="text-black text-center p-3 flex-grow">{taskInstructions}</p>
+    <div className="bg-white rounded-lg shadow-md p-3 w-full flex items-center">
+      <div className="flex-shrink-0 mr-4">
+        <div className="w-2 h-full bg-custom-orange rounded-full"></div>
+      </div>
+      <div className="flex-1">
+        <h3 className="text-sm font-medium text-gray-500">{emberType} 🗹</h3>
+        <p className="text-base font-semibold text-gray-800">
+          {taskInstructions}
+        </p>
+      </div>
     </div>
   );
 }
