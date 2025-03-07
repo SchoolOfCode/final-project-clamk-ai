@@ -198,7 +198,6 @@ export default function Communities() {
                   name={community.name}
                   purpose={community.purpose}
                   url={community.link}
-                  region={community.region}
                 />
               ))}
             </div>
