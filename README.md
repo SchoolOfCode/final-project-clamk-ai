@@ -35,6 +35,10 @@ With Novari, we’re not just offering a tool, we’re building an environment w
 
 - Node.js and npm installed on your machine.
 
+## TEST ACCESS 
+- **email**: guest@demo.com
+- **password**: demopassword1234
+
 ### Installation
 
 1. Clone the repository:
@@ -68,8 +72,8 @@ We welcome contributions from the community! If you'd like to contribute, please
     
 
 ## Links
-[Novari](https://well-being-app-final-project.vercel.app/auth/signin)
-[Presentation Slides](https://www.canva.com/design/DAGg--cQNLc/Y9WP7dp88ABfBhE-rwA8HA/edit)
+- [Novari](https://well-being-app-final-project.vercel.app/auth/signin)
+- [Presentation Slides](https://www.canva.com/design/DAGg--cQNLc/Y9WP7dp88ABfBhE-rwA8HA/edit)
 
 
 If you have any questions or feedback, please reach out to us at kitjonesuk@gmail.com
