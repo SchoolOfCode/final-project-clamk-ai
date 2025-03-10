@@ -81,6 +81,6 @@ We welcome contributions from the community! If you'd like to contribute, please
 - [LinkedIn - Maddy](https://www.linkedin.com/in/madeleine-walsh-81737498/)
 
 
-If you have any questions or feedback, please reach out to us at kitjonesuk@gmail.com
+If you have any questions or feedback, please reach out to us at adamhemmingsdev@gmail.com
 
 Thank you for using Novari! We hope it helps you on your journey to personal growth and community building.
