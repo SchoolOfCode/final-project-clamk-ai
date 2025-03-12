@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { supabase } from "../../lib/supabase"; // Import the initialized client
 import introJs from "intro.js";
+import { start } from "repl";
 
 type Task = {
   id: number;
@@ -25,6 +26,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [skipAnimation, setSkipAnimation] = useState(false);
   const [cards, setCards] = useState<Task[]>([]);
+  const [isTutorialActive, setIsTutorialActive] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -130,6 +132,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
 
   // starts intro tut with custom styling
   useEffect(() => {
+    if (!isTutorialActive) return;
     // Add the custom CSS for Intro.js
     const customCss = `
     /* Customized Intro.js CSS for Novari's green theme */
@@ -479,7 +482,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
       skipLabel: "Skip",
     });
 
-    // Add a timeout to ensure DOM elements are fully rendered before starting the tutorial
+    // add timeout to ensure elements are loaded before starting the tutorial
     setTimeout(() => {
       // Check if elements exist before starting the tutorial
       const heroElement = document.getElementById("hero");
@@ -497,100 +500,110 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
           nextBtn: !!nextBtnElement,
         });
       }
-    }, 1000); // 2 second delay
+    }, 1000);
 
-    // Clean up the style element when the component unmounts
     return () => {
       if (styleElement && document.head.contains(styleElement)) {
         document.head.removeChild(styleElement);
       }
     };
-  }, []); // the tut only runs on mount
-  console.log(cards);
+  }, [isTutorialActive]); // runs effect when isTutorialActive changes
+
+  const startTutorial = () => {
+    setIsTutorialActive(true);
+  };
 
   return (
-    <div className="pb-40 w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
-      <div id="hero" className="relative w-full h-96 perspective">
-        {/* Carousel container */}
-        <div
-          className={`absolute w-full h-full ${
-            skipAnimation ? "" : "transition-transform duration-700 ease-out"
-          }`}
-          style={{
-            transformStyle: "preserve-3d",
-            transform: `rotateY(${currentIndex * -120}deg)`,
-          }}
-        >
-          {/* Generate all cards */}
-          {cards.map((card, index) => {
-            const radius = 265; // Distance from center - cards are closer together
-            const isActive = index === currentIndex % cards.length;
+    <div>
+      <button
+        onClick={startTutorial}
+        className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-xl transition-colors text-2xl"
+      >
+        Tutorial
+      </button>
+      <div className="pb-40 w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
+        <div id="hero" className="relative w-full h-96 perspective">
+          {/* Carousel container */}
+          <div
+            className={`absolute w-full h-full ${
+              skipAnimation ? "" : "transition-transform duration-700 ease-out"
+            }`}
+            style={{
+              transformStyle: "preserve-3d",
+              transform: `rotateY(${currentIndex * -120}deg)`,
+            }}
+          >
+            {/* Generate all cards */}
+            {cards.map((card, index) => {
+              const radius = 265; // Distance from center - cards are closer together
+              const isActive = index === currentIndex % cards.length;
 
-            return (
-              <div
-                key={index}
-                className={`absolute top-0 left-0 right-0 mx-auto w-80 h-100 rounded-full shadow-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
-                  card.completed
-                    ? "bg-radial from-emerald-700 from-40% to-emerald-900"
-                    : "bg-radial from-green-200 from-40% to-custom-green text-gray-600"
-                }`}
-                style={{
-                  transform: `rotateY(${
-                    index * 120
-                  }deg) translateZ(${radius}px)`,
-                  opacity: isActive ? 1 : 0.2, // Active card has full opacity, others slightly dimmed
-                }}
-              >
-                <div>
-                  <h2 className="text-2xl font-bold pt-25 text-center mb-3">
-                    {card["name"]}
-                  </h2>
-                  <p className="text-center">{card.content}</p>
-                </div>
-                <button
-                  id={isActive ? "complete" : ""}
-                  onClick={() => handleComplete(card.id)}
-                  disabled={card.completed}
-                  className={`mt-4 py-3 px-6 rounded-lg self-center transition-all duration-300 
+              return (
+                <div
+                  key={index}
+                  className={`absolute top-0 left-0 right-0 mx-auto w-80 h-100 rounded-full shadow-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
+                    card.completed
+                      ? "bg-radial from-emerald-700 from-40% to-emerald-900"
+                      : "bg-radial from-green-200 from-40% to-custom-green text-gray-600"
+                  }`}
+                  style={{
+                    transform: `rotateY(${
+                      index * 120
+                    }deg) translateZ(${radius}px)`,
+                    opacity: isActive ? 1 : 0.2, // Active card has full opacity, others slightly dimmed
+                  }}
+                >
+                  <div>
+                    <h2 className="text-2xl font-bold pt-25 text-center mb-3">
+                      {card["name"]}
+                    </h2>
+                    <p className="text-center">{card.content}</p>
+                  </div>
+                  <button
+                    id={isActive ? "complete" : ""}
+                    onClick={() => handleComplete(card.id)}
+                    disabled={card.completed}
+                    className={`mt-4 py-3 px-6 rounded-lg self-center transition-all duration-300 
                     ${
                       card.completed
                         ? "bg-green-100 text-green-800 cursor-not-allowed"
                         : "bg-emerald-700 hover:bg-emerald-800 text-custom-white"
                     } font-semibold flex items-center gap-2`}
-                >
-                  {card.completed ? (
-                    <>
-                      <Check className="text-green-600" size={20} />
-                      <span>Completed</span>
-                    </>
-                  ) : (
-                    "Complete"
-                  )}
-                </button>
-              </div>
-            );
-          })}
+                  >
+                    {card.completed ? (
+                      <>
+                        <Check className="text-green-600" size={20} />
+                        <span>Completed</span>
+                      </>
+                    ) : (
+                      "Complete"
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {/* Navigation controls */}
-      <div className="mt-12 flex gap-6">
-        <button
-          id="prevBtn"
-          onClick={handlePrev}
-          disabled={isTransitioning}
-          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-xl transition-colors text-2xl"
-        >
-          ←
-        </button>
-        <button
-          id="nextBtn"
-          onClick={handleNext}
-          disabled={isTransitioning}
-          className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-xl transition-colors text-2xl"
-        >
-          →
-        </button>
+        {/* Navigation controls */}
+        <div className="mt-12 flex gap-6">
+          <button
+            id="prevBtn"
+            onClick={handlePrev}
+            disabled={isTransitioning}
+            className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-xl transition-colors text-2xl"
+          >
+            ←
+          </button>
+          <button
+            id="nextBtn"
+            onClick={handleNext}
+            disabled={isTransitioning}
+            className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-400 py-2 px-6 rounded-xl transition-colors text-2xl"
+          >
+            →
+          </button>
+        </div>
       </div>
     </div>
   );
