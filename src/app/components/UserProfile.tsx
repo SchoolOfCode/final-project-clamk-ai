@@ -5,7 +5,8 @@ import { supabase } from "../../lib/supabase"; // Import the initialized client
 import { FormEvent } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-const emberOptions = [
+// Predefined Ember options
+const predefinedEmberOptions = [
   "Self-Awareness and Mindset",
   "Emotional Intelligence and Relationships",
   "Skill Development and Knowledge",
@@ -13,23 +14,17 @@ const emberOptions = [
   "Purpose and Goal-Setting",
 ];
 
-type Profile = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  ember_preferences: string;
-};
-
 export default function UserProfile() {
+  const [emberOptions] = useState<string[]>(predefinedEmberOptions); // Use predefined options
   const [selectedEmbers, setSelectedEmbers] = useState<string[]>([]);
-  const [profile, setProfile] = useState<Profile | null>(null);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [emberTasks, setEmberTasks] = useState<
+    { Ember_Type: string; Task_Instructions: string }[]
+  >([]);
 
   useEffect(() => {
-    // We can safely perform our logic after the component is mounted on the client
     const checkUser = async () => {
       const {
         data: { user },
@@ -37,18 +32,29 @@ export default function UserProfile() {
       if (user) {
         const { data } = await supabase
           .from("profiles")
-          .select()
+          .select("*")
           .eq("id", user.id);
         if (data && data.length > 0) {
-          const profileData = data[0] as Profile;
-          setProfile(profileData);
+          const profileData = data[0];
           setFirstName(profileData.first_name);
           setLastName(profileData.last_name);
           setEmail(profileData.email);
           setSelectedEmbers(profileData.ember_preferences.split(","));
+
+          // Fetch tasks based on ember_preferences
+          const preferences = profileData.ember_preferences.split(",");
+          const { data: tasks } = await supabase
+            .from("tasks")
+            .select("Ember_Type, Task_Instructions")
+            .in("Ember_Type", preferences);
+
+          if (tasks) {
+            setEmberTasks(tasks); // Store the tasks fetched
+          }
         }
       }
     };
+
     checkUser();
   }, []);
 
@@ -72,32 +78,49 @@ export default function UserProfile() {
     if (e.currentTarget.name === "email") {
       setEmail(e.currentTarget.value);
     }
-    console.log(e.currentTarget.name, e.currentTarget.value);
   };
 
   const handleFormSubmit = async () => {
-    const updateData = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      ember_preferences: selectedEmbers.join(","),
-    };
-
-    const { error } = await supabase
-      .from("profiles")
-      .update(updateData)
-      .eq("id", profile?.id);
-
-    if (!error) {
-      toast("Updated!");
+    // 1. Get user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please sign in");
+      return;
     }
+
+    // 2. First try normal update
+    const { error: updateError } = await supabase
+      .from("profiles")
+      .update({ ember_preferences: selectedEmbers.join(",") })
+      .eq("id", user.id);
+
+    if (!updateError) {
+      toast.success("Preferences updated!");
+      return;
+    }
+
+    // 3. If normal update fails, try creating profile
+    const { error: upsertError } = await supabase.from("profiles").upsert({
+      id: user.id,
+      ember_preferences: selectedEmbers.join(","),
+    });
+
+    if (!upsertError) {
+      toast.success("Preferences saved!");
+      return;
+    }
+
+    // 4. Ultimate fallback - show raw error
+    console.error("FINAL FAILURE:", {
+      userId: user.id,
+      error: JSON.stringify(upsertError, null, 2),
+      attemptedData: selectedEmbers.join(","),
+    });
+    toast.error("Failed to save - check console");
   };
 
-  console.log(selectedEmbers);
-
-  if (!profile) {
-    return <></>;
-  }
   return (
     <div className="bg-custom-green min-h-screen pt-20">
       <div className="max-w-2xl mx-auto px-4 py-8">
@@ -147,28 +170,6 @@ export default function UserProfile() {
                 value={email}
               />
             </div>
-            {/* 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Phone
-              </label>
-              <input
-                type="text"
-                className="text-gray-800 p-2 bg-custom-green/50 rounded border border-gray-200"
-                value={profile.phone}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Location
-              </label>
-              <input
-                type="text"
-                className="text-gray-800 p-2 bg-custom-green/50 rounded border border-gray-200"
-                value={profile.location}
-              />
-            </div> */}
           </div>
 
           <div className="mt-8">
@@ -199,21 +200,27 @@ export default function UserProfile() {
               Save Profile
             </button>
           </div>
-          {/* 
+
+          {/* Ember Task Instructions */}
           <div className="mt-8">
-            <h2 className="text-xl font-bold text-custom-white mb-4">Tasks</h2>
-            {tasks.length > 0 ? (
-              <ul>
-                {tasks.map((task) => (
-                  <li key={task.id} className="text-custom-white mb-2">
-                    {task.name}
-                  </li>
-                ))}
-              </ul>
+            <h2 className="text-xl font-bold text-custom-white mb-4">
+              Ember Tasks & Instructions
+            </h2>
+            {emberTasks.length > 0 ? (
+              emberTasks.map((task) => (
+                <div key={task.Ember_Type} className="mb-4">
+                  <h3 className="text-lg font-bold text-custom-white">
+                    {task.Ember_Type}
+                  </h3>
+                  <p className="text-custom-white">{task.Task_Instructions}</p>
+                </div>
+              ))
             ) : (
-              <p className="text-custom-white">No tasks available</p>
+              <p className="text-custom-white">
+                No tasks available for selected preferences.
+              </p>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
       <ToastContainer />

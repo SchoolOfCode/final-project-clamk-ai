@@ -22,6 +22,7 @@ export default function Header() {
               alt="Novari Logo"
               width={180}
               height={216}
+              priority
             />
           </div>
 

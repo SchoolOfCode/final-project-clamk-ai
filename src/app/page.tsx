@@ -1,9 +1,8 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
-import { User } from "@supabase/supabase-js"; // Import the User type
+import { User } from "@supabase/supabase-js";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Carousel from "./components/Carousel";
@@ -18,10 +17,11 @@ type Profile = {
 };
 
 const Home = () => {
-  const [user, setUser] = useState<User | null>(null); // Fix here
+  const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
   useEffect(() => {
     let isMounted = true;
 
@@ -44,7 +44,7 @@ const Home = () => {
     return () => {
       isMounted = false;
     };
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -62,6 +62,12 @@ const Home = () => {
     checkUser();
   }, [user]);
 
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/auth/signin");
+    }
+  }, [loading, user, router]);
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -73,13 +79,10 @@ const Home = () => {
 
   if (loading) return <div>Loading...</div>;
 
-  if (!user && !profile) {
-    router.replace("/auth/signin");
-    return null;
+  if (!user) {
+    return null; // Prevent rendering before redirecting
   }
-  // const tasks: Task[] = []; // Initialize with an empty array
-  // const selectedEmbers: string[] = []; // Initialize with an empty array
-  console.log(profile);
+
   return (
     <div className="bg-custom-green text-white min-h-screen">
       <Header />

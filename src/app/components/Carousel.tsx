@@ -35,7 +35,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
         .from("Tasks")
         .select("*")
         .in("Ember Type", userProfile.ember_preferences.split(","));
-      console.log(data);
+      console.log(userProfile.ember_preferences.split(","));
       if (error) {
         console.error("Error fetching tasks:", error);
       } else {
@@ -479,13 +479,18 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
       skipLabel: "Skip",
     });
 
-    // Add a timeout to ensure DOM elements are fully rendered before starting the tutorial
-    setTimeout(() => {
-      // Check if elements exist before starting the tutorial
+    const startTutorial = () => {
       const heroElement = document.getElementById("hero");
       const completeElement = document.getElementById("complete");
       const prevBtnElement = document.getElementById("prevBtn");
       const nextBtnElement = document.getElementById("nextBtn");
+
+      console.log("Checking DOM elements:", {
+        hero: !!heroElement,
+        complete: !!completeElement,
+        prevBtn: !!prevBtnElement,
+        nextBtn: !!nextBtnElement,
+      });
 
       if (heroElement && completeElement && prevBtnElement && nextBtnElement) {
         intro.start();
@@ -497,15 +502,31 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
           nextBtn: !!nextBtnElement,
         });
       }
-    }, 1000); // 2 second delay
+    };
 
-    // Clean up the style element when the component unmounts
+    // Use a MutationObserver to detect when the DOM is updated
+    const observer = new MutationObserver(() => {
+      const heroElement = document.getElementById("hero");
+      const completeElement = document.getElementById("complete");
+      const prevBtnElement = document.getElementById("prevBtn");
+      const nextBtnElement = document.getElementById("nextBtn");
+
+      if (heroElement && completeElement && prevBtnElement && nextBtnElement) {
+        observer.disconnect(); // Stop observing once elements are found
+        startTutorial();
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Clean up the style element and observer when the component unmounts
     return () => {
       if (styleElement && document.head.contains(styleElement)) {
         document.head.removeChild(styleElement);
       }
+      observer.disconnect();
     };
-  }, []); // the tut only runs on mount
+  }, [cards]); // Re-run when `cards` changes
   console.log(cards);
 
   return (
@@ -574,7 +595,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
       </div>
 
       {/* Navigation controls */}
-      <div className="mt-12 flex gap-6">
+      <div id="hero" className="mt-12 flex gap-6">
         <button
           id="prevBtn"
           onClick={handlePrev}
