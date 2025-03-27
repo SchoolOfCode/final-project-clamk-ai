@@ -85,7 +85,7 @@ const Home = () => {
 
   return (
     <div className="bg-custom-green text-white min-h-screen">
-      <Header />
+      <Header user={user} />
       <PositiveQuotes />
       <Carousel userProfile={profile as Profile} />
       <div className="absolute top-4 left-4">
