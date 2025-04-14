@@ -102,7 +102,7 @@ const SignUp = () => {
           <p className="text-sm text-gray-700">
             Already have an account?{" "}
             <a
-              href="/signin"
+              href="/auth/signin"
               className="text-emerald-600 hover:text-emerald-300"
             >
               Sign In
