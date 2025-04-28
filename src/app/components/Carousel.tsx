@@ -505,29 +505,29 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
   //   };
 
     // Use a MutationObserver to detect when the DOM is updated
-    const observer = new MutationObserver(() => {
-      const heroElement = document.getElementById("hero");
-      const completeElement = document.getElementById("complete");
-      const prevBtnElement = document.getElementById("prevBtn");
-      const nextBtnElement = document.getElementById("nextBtn");
+  //   const observer = new MutationObserver(() => {
+  //     const heroElement = document.getElementById("hero");
+  //     const completeElement = document.getElementById("complete");
+  //     const prevBtnElement = document.getElementById("prevBtn");
+  //     const nextBtnElement = document.getElementById("nextBtn");
 
-      if (heroElement && completeElement && prevBtnElement && nextBtnElement) {
-        observer.disconnect(); // Stop observing once elements are found
-        startTutorial();
-      }
-    });
+  //     if (heroElement && completeElement && prevBtnElement && nextBtnElement) {
+  //       observer.disconnect(); // Stop observing once elements are found
+  //       startTutorial();
+  //     }
+  //   });
 
-    observer.observe(document.body, { childList: true, subtree: true });
+  //   observer.observe(document.body, { childList: true, subtree: true });
 
-    // Clean up the style element and observer when the component unmounts
-    return () => {
-      if (styleElement && document.head.contains(styleElement)) {
-        document.head.removeChild(styleElement);
-      }
-      observer.disconnect();
-    };
-  }, [cards]); // Re-run when `cards` changes
-  console.log(cards);
+  //   // Clean up the style element and observer when the component unmounts
+  //   return () => {
+  //     if (styleElement && document.head.contains(styleElement)) {
+  //       document.head.removeChild(styleElement);
+  //     }
+  //     observer.disconnect();
+  //   };
+  // }, [cards]); // Re-run when `cards` changes
+  // console.log(cards);
 
   return (
     <div className="pb-40 w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
