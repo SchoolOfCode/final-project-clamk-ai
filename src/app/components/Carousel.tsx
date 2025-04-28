@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { supabase } from "../../lib/supabase"; // Import the initialized client
-import introJs from "intro.js";
+// import introJs from "intro.js";
 
 type Task = {
   id: number;
