@@ -12,7 +12,12 @@ export default function Header() {
         {/* Container for logo and navbar with pill background */}
         <div className="relative flex flex-col items-center max-w-md mx-auto">
           {/* Pill-shaped background */}
-          <div className="absolute h-64 w-300 mt-3 bg-custom-white/20 rounded-full"></div>
+          <div
+            className="absolute h-64 w-300 mt-3 bg-custom-white/20 rounded-full py-4
+  border-[3px] border-black/40
+  shadow-[0_4px_30px_rgba(0,0,0,0.25)]
+  backdrop-blur-md"
+          ></div>
 
           {/* Logo */}
           <div className="flex justify-center scale-120 w-full pt-7 z-10">
@@ -22,6 +27,10 @@ export default function Header() {
               alt="Novari Logo"
               width={180}
               height={216}
+              style={{
+                width: `auto`,
+                height: `180px`,
+              }}
               priority
             />
           </div>

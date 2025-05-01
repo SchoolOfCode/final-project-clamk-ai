@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-interface QuoteData {
+interface PositiveQuoteData {
   quote: string;
   author: string;
 }
@@ -13,23 +13,28 @@ export default function PositiveQuotes() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Fetch the quote data once when the component is mounted
     const fetchQuote = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("https://qapi.vercel.app/api/random");
-        const data: QuoteData = await response.json(); // Type the response as QuoteData
+        const response = await fetch(
+          "https://positive-quotes-api.vercel.app/api/random"
+        );
+        const data: PositiveQuoteData = await response.json();
         setQuote(data.quote);
         setAuthor(data.author);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setQuote(
+          "If something is wrong, fix it now. But train yourself not to worry, worry fixes nothing."
+        );
+        setAuthor("Ernest Hemingway");
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchQuote();
-  }, []); // Empty dependency array ensures it runs only on mount
+  }, []);
 
   return (
     <div className="flex justify-center items-center mt-16 pb-18 p-8 relative">
