@@ -1,26 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { supabase } from "../../../lib/supabase.js"; // Import the initialized client
-import { useRouter } from "next/navigation"; // Use `useRouter` from next/navigation
+import { supabase } from "../../../lib/supabase.js";
+import { useRouter } from "next/navigation";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
-  const router = useRouter(); // Hook to navigate
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    // We can safely perform our logic after the component is mounted on the client
     const checkUser = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
-        router.push("/"); // Redirect to home if user is logged in
+        router.push("/");
       } else {
-        setIsLoading(false); // Stop loading if user not authenticated
+        setIsLoading(false);
       }
     };
     checkUser();
@@ -39,14 +38,13 @@ const SignIn = () => {
       setError(error.message);
     } else {
       console.log("User signed in:", data.user);
-      // Redirect to home page after successful sign-in
-      router.push("/"); // Assuming your home page is the default route
+
+      router.push("/");
     }
   };
 
-  // Return a loading state until we're ready to show the form
   if (isLoading) {
-    return <div>Loading...</div>; // You can customize this loading state as needed
+    return <div>Loading...</div>;
   }
 
   return (

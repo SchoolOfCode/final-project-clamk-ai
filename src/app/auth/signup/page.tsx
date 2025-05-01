@@ -1,30 +1,27 @@
 "use client";
 
 import React, { useState } from "react";
-import { supabase } from "../../../lib/supabase.js"; // Import the initialized client
-import { useRouter } from "next/navigation"; // Use `useRouter` from next/navigation
-// import Image from "next/image.js";
+import { supabase } from "../../../lib/supabase.js";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false); // Remove loading state related to user check
-  const router = useRouter(); // Hook to navigate
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setIsLoading(true); // Set loading state when sign-up starts
+    setIsLoading(true);
 
-    // Basic email validation (you can extend it)
     if (!/\S+@\S+\.\S+/.test(email)) {
       setError("Please enter a valid email address.");
       setIsLoading(false);
       return;
     }
 
-    // Password validation (you can make it stronger)
     if (password.length < 6) {
       setError("Password should be at least 6 characters.");
       setIsLoading(false);
@@ -38,21 +35,19 @@ const SignUp = () => {
 
     if (error) {
       setError(error.message);
-      setIsLoading(false); // Stop loading if there's an error
+      setIsLoading(false);
     } else {
       console.log("User signed up:", data.user);
-      // Redirect to home page after successful sign-up
-      router.push("/"); // Assuming your home page is the default route
+      router.push("/");
     }
   };
 
-  // Return a loading state until we're ready to show the form
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-emerald-600"></div>
       </div>
-    ); // Styled spinner
+    );
   }
 
   return (
