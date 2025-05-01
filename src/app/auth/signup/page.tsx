@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { supabase } from "../../../lib/supabase.js";
 import { useRouter } from "next/navigation";
+import Image from "next/image.js";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -52,10 +53,16 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-custom-green">
-      <img
-        className="h-70 w-105 pr-40"
+      <Image
         src="/images/novari-logo.png"
         alt="Logo"
+        width={105}
+        height={70}
+        className="pr-40"
+        style={{
+          height: "auto",
+          width: "auto",
+        }}
       />
       <div className="bg-custom-white p-8 rounded-lg shadow-lg max-w-sm w-full">
         <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
