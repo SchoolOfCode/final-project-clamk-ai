@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
-import { supabase } from "../../lib/supabase"; // Import the initialized client
+import { supabase } from "../../lib/supabase";
 
 type Task = {
   id: number;
   name: string;
-  content: string; // Add other fields as needed
+  content: string;
   completed: boolean;
 };
 
@@ -46,7 +46,6 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
             completed: false,
           };
         });
-        // setCards(mappedData.slice(0, 3) as Task[]);
         if (mappedData.length < 4) {
           setCards(mappedData as Task[]);
         } else {
@@ -75,22 +74,18 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
     setCards(modifiedCards);
   };
 
-  // Move to next card
   const handleNext = () => {
     if (isTransitioning) return;
 
-    // Handle transition from last to first card
     if (currentIndex === cards.length - 1) {
       setIsTransitioning(true);
-      // First set to an intermediate position
+
       setCurrentIndex(cards.length);
 
-      // After animation completes, reset to position 0 without animation
       setTimeout(() => {
         setSkipAnimation(true);
         setCurrentIndex(0);
 
-        // Re-enable animations after the reset
         setTimeout(() => {
           setSkipAnimation(false);
           setIsTransitioning(false);
@@ -101,22 +96,18 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
     }
   };
 
-  // Move to previous card
   const handlePrev = () => {
     if (isTransitioning) return;
 
-    // Handle transition from first to last card
     if (currentIndex === 0) {
       setIsTransitioning(true);
-      // First set to an intermediate position
+
       setCurrentIndex(-1);
 
-      // After animation completes, reset to position cards.length - 1 without animation
       setTimeout(() => {
         setSkipAnimation(true);
         setCurrentIndex(cards.length - 1);
 
-        // Re-enable animations after the reset
         setTimeout(() => {
           setSkipAnimation(false);
           setIsTransitioning(false);
@@ -126,8 +117,6 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
       setCurrentIndex((prev) => prev - 1);
     }
   };
-
- 
 
   return (
     <div className="pb-40 w-full flex flex-col items-center justify-center bg-custom-green overflow-hidden">
@@ -144,7 +133,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
         >
           {/* Generate all cards */}
           {cards.map((card, index) => {
-            const radius = 265; // Distance from center - cards are closer together
+            const radius = 265;
             const isActive = index === currentIndex % cards.length;
 
             return (
@@ -159,7 +148,7 @@ const Carousel = ({ userProfile }: { userProfile: Profile }) => {
                   transform: `rotateY(${
                     index * 120
                   }deg) translateZ(${radius}px)`,
-                  opacity: isActive ? 1 : 0.2, // Active card has full opacity, others slightly dimmed
+                  opacity: isActive ? 1 : 0.2,
                 }}
               >
                 <div>

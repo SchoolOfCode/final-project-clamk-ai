@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabase"; // Import the initialized client
+import { supabase } from "../../lib/supabase";
 import { FormEvent } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-// Predefined Ember options
 const predefinedEmberOptions = [
   "Self-Awareness and Mindset",
   "Emotional Intelligence and Relationships",
@@ -15,7 +14,7 @@ const predefinedEmberOptions = [
 ];
 
 export default function UserProfile() {
-  const [emberOptions] = useState<string[]>(predefinedEmberOptions); // Use predefined options
+  const [emberOptions] = useState<string[]>(predefinedEmberOptions);
   const [selectedEmbers, setSelectedEmbers] = useState<string[]>([]);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -41,7 +40,6 @@ export default function UserProfile() {
           setEmail(profileData.email);
           setSelectedEmbers(profileData.ember_preferences.split(","));
 
-          // Fetch tasks based on ember_preferences
           const preferences = profileData.ember_preferences.split(",");
           const { data: tasks } = await supabase
             .from("tasks")
@@ -49,7 +47,7 @@ export default function UserProfile() {
             .in("Ember_Type", preferences);
 
           if (tasks) {
-            setEmberTasks(tasks); // Store the tasks fetched
+            setEmberTasks(tasks);
           }
         }
       }
@@ -81,7 +79,6 @@ export default function UserProfile() {
   };
 
   const handleFormSubmit = async () => {
-    // 1. Get user
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -90,7 +87,6 @@ export default function UserProfile() {
       return;
     }
 
-    // 2. First try normal update
     const { error: updateError } = await supabase
       .from("profiles")
       .update({ ember_preferences: selectedEmbers.join(",") })
@@ -101,7 +97,6 @@ export default function UserProfile() {
       return;
     }
 
-    // 3. If normal update fails, try creating profile
     const { error: upsertError } = await supabase.from("profiles").upsert({
       id: user.id,
       ember_preferences: selectedEmbers.join(","),
@@ -112,7 +107,6 @@ export default function UserProfile() {
       return;
     }
 
-    // 4. Ultimate fallback - show raw error
     console.error("FINAL FAILURE:", {
       userId: user.id,
       error: JSON.stringify(upsertError, null, 2),
