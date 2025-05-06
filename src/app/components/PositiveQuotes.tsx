@@ -17,7 +17,7 @@ export default function PositiveQuotes() {
       try {
         setIsLoading(true);
         const response = await fetch(
-          "https://positive-quotes-api.vercel.app/api/random"
+          "https://positive-quotes-api.vercel.app/api"
         );
         const data: PositiveQuoteData = await response.json();
         setQuote(data.quote);
