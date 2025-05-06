@@ -34,7 +34,7 @@ export default function PositiveQuotes() {
     };
 
     fetchQuote();
-  });
+  }, []);
 
   return (
     <div className="flex justify-center items-center mt-16 pb-18 p-8 relative">
