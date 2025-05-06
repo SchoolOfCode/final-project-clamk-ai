@@ -12,27 +12,27 @@ export default function PositiveQuotes() {
   const [author, setAuthor] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchQuote = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          "https://positive-quotes-api.vercel.app/api/random"
-        );
-        const data: PositiveQuoteData = await response.json();
-        setQuote(data.quote);
-        setAuthor(data.author);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setQuote(
-          "If something is wrong, fix it now. But train yourself not to worry, worry fixes nothing."
-        );
-        setAuthor("Ernest Hemingway");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchQuote = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        "https://positive-quotes-api.vercel.app/api/random"
+      );
+      const data: PositiveQuoteData = await response.json();
+      setQuote(data.quote);
+      setAuthor(data.author);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setQuote(
+        "If something is wrong, fix it now. But train yourself not to worry, worry fixes nothing."
+      );
+      setAuthor("Ernest Hemingway");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchQuote();
   }, []);
 
