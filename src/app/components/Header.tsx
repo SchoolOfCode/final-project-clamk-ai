@@ -3,11 +3,11 @@ import Navbar from "./Navbar";
 import StreakCounter from "./StreakCounter";
 import { User } from "@supabase/supabase-js";
 
-export default function Header({ user }: { user: User }) {
+export default function Header({ user }: { user?: User }) {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] bg-custom-green items-center text-white justify-items-center p-8 pt-30 font-[family-name:var(--font-geist-sans)]">
       <div className="absolute top-0 right-0 mt-8 mr-8">
-        <StreakCounter user={user} />
+        {user && <StreakCounter user={user} />}
       </div>
       <main className="flex flex-col items-center w-full">
         {/* Container for logo and navbar with pill background */}
